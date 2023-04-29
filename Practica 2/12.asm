@@ -37,9 +37,9 @@ IRET
 
 ORG 2000H
 CLI
-MOV AL, 0FDH
+MOV AL, 0FDH ;11111101
 OUT IMR, AL ; PIC: registro IMR
-MOV AL, N_CLK
+MOV AL, N_CLK ; el ID del registro
 OUT INT1, AL ; PIC: registro INT1
 MOV AL, 1
 OUT COMP, AL ; TIMER: registro COMP
