@@ -1,6 +1,12 @@
-PIC     EQU 20H 
-TIMER   EQU 10H
-PIO     EQU 30H
+EOI     EQU 20H 
+IMR     EQU 21H 
+CONT   EQU 10H
+COMP   EQU 11H
+PA     EQU 30H
+PB     EQU 31H
+CA     EQU 32H
+CB     EQU 33H
+INT1   EQU 25H
 N_CLK   EQU 10
 
         ORG 40
@@ -15,25 +21,25 @@ RUT_CLK:INC INICIO
         JNZ LUCES
         MOV INICIO, 0
 LUCES:  MOV AL,     INICIO
-        OUT PIO+1,  AL ;PB
+        OUT PB,  AL ;PB
         MOV AL,     0
-        OUT TIMER,  AL
+        OUT CONT,  AL
         MOV AL,     20H
-        OUT PIC,    AL
+        OUT EOI,    AL
         IRET
 
         ORG 2000H
         CLI
         MOV AL,     0FDH
-        OUT PIC+1,  AL
+        OUT IMR,  AL
         MOV AL,     N_CLK
-        OUT PIC+5,  AL
+        OUT INT1,  AL
         MOV AL,     1
-        OUT TIMER+1,AL
+        OUT COMP,AL
         MOV AL, 0
-        OUT PIO+3,  AL ;CB
-        OUT PIO+1,  AL ;PB
-        OUT TIMER,  AL
+        OUT CB,  AL ;CB
+        OUT PB,  AL ;PB
+        OUT CONT,  AL
         STI
 LAZO:   JMP LAZO
         HLT
