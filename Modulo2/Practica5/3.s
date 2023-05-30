@@ -16,4 +16,3 @@ div.d f5, f4, f3    ; f5 = f4 / f3, ((b * a)/ 2)
 
 s.d f5, superficie(r0)  ; almaceno el resultado de f5 en superficie
 
-;mirar en PC
