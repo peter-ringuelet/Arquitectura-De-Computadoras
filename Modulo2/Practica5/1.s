@@ -8,6 +8,7 @@ res2: .double 0.0
 l.d f1, n1(r0)     ; carga en registro f1 el valor de n1
 l.d f2, n2(r0)     ; carga en registro f2 el valor de n1
 
+
 NOP
 add.d f3, f2, f1   ; almacena en f3 el la suma de f1 y f2
 mul.d f1, f2, f1   ; PARA EJERCICIO d)
@@ -15,7 +16,7 @@ mul.d f4, f2, f1   ; almacena en f3 la multip de f1 y f2
 s.d f3, res1(r0)   ; almacena en memoria
 s.d f4, res2(r0)
 halt
-;probar win
+
 ; a) Con forwarfing --> 16 ciclos, 7 instrucciones, 
 ; 2.286 CPI.
 
