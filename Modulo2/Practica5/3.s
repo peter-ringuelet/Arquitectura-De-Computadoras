@@ -15,4 +15,4 @@ mul.d f4, f1, f2    ; f4 = f1 * f2, (b * a)
 div.d f5, f4, f3    ; f5 = f4 / f3, ((b * a)/ 2)
 
 s.d f5, superficie(r0)  ; almaceno el resultado de f5 en superficie
-
+; funciona
