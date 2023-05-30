@@ -1,6 +1,6 @@
 .data 
-NUM1: .word 2
-NUM2: .word 3
+NUM1: .word 10
+NUM2: .word 10
 RES: .word 0
 
 .code
@@ -17,4 +17,3 @@ bnez r2, loop               ; si no termine de mult, sigo
 sd r3, RES(r0)       ; pongo en RES el valor del contador (r3)
 final: nop
 halt
-; falta probar en Windows
