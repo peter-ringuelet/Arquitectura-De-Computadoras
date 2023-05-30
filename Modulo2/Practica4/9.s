@@ -2,7 +2,6 @@
 x: .word 2
 y: .word 3
 a: .word 2
-res: .word 0
 
 .code
 ld r1, x(r0)
@@ -17,6 +16,7 @@ dadd r1, r1, r2   ; x = x + y
 daddi r3, r3, -1  ; a = a - 1
 j loop
 
-FIN: sd r1, res(r0)
+FIN: sd r1, x(r0)
+sd r3, a(r0)
+nop
 halt
-; revisar en WinMips
