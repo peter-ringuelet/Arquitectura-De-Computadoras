@@ -2,6 +2,7 @@
 
 - [Procesamiento Multiciclo](#procesamiento-multiciclo)
 - [Segmentación de Cauce o Pipelining](#segmentacion-de-cauce)
+- [Dependencia de Datos y Riesgos de Control](#dependencia-de-datos-y-riesgos-de-control)
 
 ## Procesamiento Multiciclo
 
@@ -34,7 +35,7 @@ La segmentación de cauce, o pipelining, es una técnica para organizar el hardw
 
 ### Analogía de Lavandería
 
-Una analogía útil para entender la segmentación de cauce es una lavandería. En este escenario, cada prenda pasa por tres etapas: lavado, secado y doblado.Si organizas estas tareas de manera que mientras una prenda está siendo secada, otra está siendo lavada, y otra está siendo doblada, optimizas el uso de los recursos y mejoras la eficiencia general del proceso.
+Una analogía útil para entender la segmentación de cauce es una lavandería. En este escenario, cada prenda pasa por tres etapas: lavado, secado y doblado. Si organizas estas tareas de manera que mientras una prenda está siendo secada, otra está siendo lavada, y otra está siendo doblada, optimizas el uso de los recursos y mejoras la eficiencia general del proceso.
 
 ### Hardware y Ruta de Datos Segmentados
 
@@ -52,25 +53,24 @@ Un ejemplo de implementación de la segmentación de cauce implica el paso de ci
 
 En cada etapa del ciclo de ejecución de una instrucción, se utiliza un hardware específico: en la etapa de fetch se utiliza la memoria de instrucciones; en la etapa de decodificación se utiliza el banco de registros; en la etapa de ejecución se utiliza la unidad aritmética; en la etapa de acceso a memoria se utiliza la memoria de datos; y en la etapa de escritura o write back se vuelve a utilizar el banco de registros.
 
+## Dependencia de Datos y Riesgos de Control
 
-## Dependencia de Datos (Data Hazards)
+En la segmentación de cauce, pueden surgir situaciones problemáticas llamadas riesgos. Hay dos tipos principales de riesgos: los riesgos de datos y los riesgos de control.
 
-Existen tres tipos de dependencia de datos, también conocidos por sus acrónimos en inglés:
+### Riesgos de Datos
 
-1. **Dependencia Verdadera (RAW - Read After Write)**: Sucede cuando una instrucción genera un dato que una instrucción posterior va a leer. La escritura de un valor es seguida por su lectura, generando una dependencia.
+Los riesgos de datos se presentan cuando dos o más instrucciones que se están ejecutando simultáneamente en diferentes etapas del cauce tienen dependencias de datos entre sí. Existen tres tipos de dependencias de datos: lectura después de escritura (RAW), escritura después de lectura (WAR) y escritura después de escritura (WAW).
 
-2. **Dependencia de Salida (WAW - Write After Write)**: Otra instrucción escribe un dato después de una anterior. Aquí se pueden producir condiciones de adelantamiento de instrucciones, donde las instrucciones más rápidas le ganen a las más lentas, sobrescribiendo el dato original. Es crucial evitar que las instrucciones rápidas terminen antes que las lentas.
+### Riesgos de Control
 
-3. **Antidependencia (WAR - Write After Read)**: En este caso, una instrucción modifica un valor antes de que una anterior lo lea. Si la instrucción que debe leer un dato no puede hacerlo porque fue cambiado antes, se produce una antidependencia.
+Los riesgos de control ocurren cuando la secuencia de ejecución de las instrucciones puede cambiar debido a una instrucción de salto o branch. Estos riesgos pueden ralentizar la ejecución del cauce porque hay que esperar a que se resuelva el salto antes de poder continuar con la ejecución de las siguientes instrucciones.
 
-El cauce simple que hemos discutido hasta ahora puede no ser suficiente para manejar estos riesgos de datos. Tendremos que tener en cuenta las instrucciones y los operandos que se utilizan en cada una de ellas para determinar las dependencias.
+### Solución a los Riesgos de Datos
 
-## Riesgos de Control (Control Hazards)
+Para solucionar los riesgos de datos, se pueden utilizar varias técnicas, como el adelanto (forwarding) y la parada del cauce (pipeline stall). El adelanto permite que los datos producidos por una instrucción sean utilizados por una instrucción posterior sin tener que pasar por todos los registros del cauce. La parada del cauce implica detener la ejecución del cauce hasta que se resuelva la dependencia de datos.
 
-Los riesgos de control, también conocidos como riesgos de instrucciones, ocurren cuando las instrucciones que modifican el contador de programa o "instruction pointer" no se han ejecutado cuando se debe comenzar a ejecutar la siguiente instrucción. Por ejemplo, con una instrucción de salto condicional o incondicional, es necesario esperar hasta que se determine si los registros son iguales o no para decidir a qué instrucción se debe saltar a continuación.
+### Solución a los Riesgos de Control
 
-Estos riesgos de control requieren que esperemos hasta que se resuelva el salto, lo cual puede requerir pausar la ejecución durante varios ciclos de reloj.
+Los riesgos de control pueden resolverse mediante técnicas como la predicción de saltos y el retardo de la toma de decisiones del salto hasta una etapa posterior del cauce. La predicción de saltos intenta adivinar el resultado de una instrucción de salto antes de que se ejecute, mientras que el retardo de la toma de decisiones implica reorganizar las instrucciones para reducir los efectos de un salto.
 
-## Conclusión
 
-Los riesgos de dependencia de datos y de control pueden complicar significativamente el rendimiento de una máquina basada en la arquitectura de pipeline. En la práctica, es posible que no se pueda lograr un rendimiento de una instrucción completada por ciclo de reloj debido a estos riesgos. Para gestionar estos riesgos, es posible que se requieran modificaciones en la ruta de datos y los registros de segmentación de la máquina.
