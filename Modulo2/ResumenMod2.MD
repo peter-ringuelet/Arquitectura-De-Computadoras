@@ -52,3 +52,25 @@ Un ejemplo de implementación de la segmentación de cauce implica el paso de ci
 
 En cada etapa del ciclo de ejecución de una instrucción, se utiliza un hardware específico: en la etapa de fetch se utiliza la memoria de instrucciones; en la etapa de decodificación se utiliza el banco de registros; en la etapa de ejecución se utiliza la unidad aritmética; en la etapa de acceso a memoria se utiliza la memoria de datos; y en la etapa de escritura o write back se vuelve a utilizar el banco de registros.
 
+
+## Dependencia de Datos (Data Hazards)
+
+Existen tres tipos de dependencia de datos, también conocidos por sus acrónimos en inglés:
+
+1. **Dependencia Verdadera (RAW - Read After Write)**: Sucede cuando una instrucción genera un dato que una instrucción posterior va a leer. La escritura de un valor es seguida por su lectura, generando una dependencia.
+
+2. **Dependencia de Salida (WAW - Write After Write)**: Otra instrucción escribe un dato después de una anterior. Aquí se pueden producir condiciones de adelantamiento de instrucciones, donde las instrucciones más rápidas le ganen a las más lentas, sobrescribiendo el dato original. Es crucial evitar que las instrucciones rápidas terminen antes que las lentas.
+
+3. **Antidependencia (WAR - Write After Read)**: En este caso, una instrucción modifica un valor antes de que una anterior lo lea. Si la instrucción que debe leer un dato no puede hacerlo porque fue cambiado antes, se produce una antidependencia.
+
+El cauce simple que hemos discutido hasta ahora puede no ser suficiente para manejar estos riesgos de datos. Tendremos que tener en cuenta las instrucciones y los operandos que se utilizan en cada una de ellas para determinar las dependencias.
+
+## Riesgos de Control (Control Hazards)
+
+Los riesgos de control, también conocidos como riesgos de instrucciones, ocurren cuando las instrucciones que modifican el contador de programa o "instruction pointer" no se han ejecutado cuando se debe comenzar a ejecutar la siguiente instrucción. Por ejemplo, con una instrucción de salto condicional o incondicional, es necesario esperar hasta que se determine si los registros son iguales o no para decidir a qué instrucción se debe saltar a continuación.
+
+Estos riesgos de control requieren que esperemos hasta que se resuelva el salto, lo cual puede requerir pausar la ejecución durante varios ciclos de reloj.
+
+## Conclusión
+
+Los riesgos de dependencia de datos y de control pueden complicar significativamente el rendimiento de una máquina basada en la arquitectura de pipeline. En la práctica, es posible que no se pueda lograr un rendimiento de una instrucción completada por ciclo de reloj debido a estos riesgos. Para gestionar estos riesgos, es posible que se requieran modificaciones en la ruta de datos y los registros de segmentación de la máquina.
